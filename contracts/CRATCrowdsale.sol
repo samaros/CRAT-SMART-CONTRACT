@@ -12,8 +12,6 @@ contract CRATCrowdsale is AccessControl, ReentrancyGuard {
     bytes32 public constant SIGNER_ROLE = keccak256("SIGNER_ROLE");
 
     IERC20 public immutable CRAT;
-
-    uint256 totalSold;
  
     constructor(address _CRAT) {
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -32,6 +30,5 @@ contract CRATCrowdsale is AccessControl, ReentrancyGuard {
             require(IERC20(tokenToPay).transferFrom(_msgSender(), address(this), amountToPay));
         }
         require(CRAT.transfer(_msgSender(), amountToReceive));
-        totalSold += amountToReceive;
     }
 }
