@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract CRATCrowdsale is AccessControl, ReentrancyGuard {
+contract CRATPresale is AccessControl, ReentrancyGuard {
 
     bytes32 public constant SIGNER_ROLE = keccak256("SIGNER_ROLE");
 
