@@ -3,6 +3,7 @@ const BN = require('bn.js');
 require('dotenv').config();
 
 const {
+    CRAT_DECIMALS
 } = process.env;
 
 const CRAT = artifacts.require("CRAT");
@@ -22,7 +23,7 @@ module.exports = async function (deployer, network) {
         return;
     let CRATInst = await CRAT.deployed();
     await deployer.deploy(
-        CRATPresale, CRATInst.address
+        CRATPresale, CRATInst.address, CRAT_DECIMALS
     );
     let CRATPresaleInst = await CRATPresale.deployed();
     console.log("CRATPresale =", CRATPresaleInst.address);

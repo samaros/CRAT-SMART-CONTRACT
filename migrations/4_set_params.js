@@ -37,6 +37,8 @@ module.exports = async function (deployer, network) {
     await CRATInst.excludeFromReward(CRATPresaleInst.address);
     await CRATInst.setFeeBeneficiary(CRAT_BENEFICIARY);
     await CRATInst.setToAddressFee(CRAT_BENEFICIARY_PERCENT);
+    await CRATInst.excludeFromFee(CRAT_BENEFICIARY);
+    await CRATInst.excludeFromReward(CRAT_BENEFICIARY);
     await CRATInst.transfer(CRAT_OWNER, new BN(CRAT_OWNER_AMOUNT).mul(new BN(10).pow(new BN(CRAT_DECIMALS))));
     await CRATInst.transfer(CRATPresaleInst.address, new BN(CRAT_PRESALE_AMOUNT).mul(new BN(10).pow(new BN(CRAT_DECIMALS))));
     await CRATInst.includeInFee(DEPLOYER_ADDRESS);

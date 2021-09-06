@@ -6,3 +6,4 @@ bin/
 test.json
 gasEstimation.txt
 package-lock.json
+contracts/mocks/
