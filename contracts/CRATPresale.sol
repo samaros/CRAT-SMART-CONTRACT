@@ -19,8 +19,24 @@ contract CRATPresale is AccessControl, ReentrancyGuard {
     uint256 private immutable CRAT_DECIMALS;
 
     address public receiver;
+
+    bool private started;
+
+    modifier onlyWhenStarted() {
+        require(started, "Not started yet");
+        _;
+    }
  
     constructor(address _CRAT, uint256 _CRAT_DECIMALS) {
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        _setupRole(SIGNER_ROLE, _msgSender());
+        CRAT = IERC20(_CRAT);
+        CRAT_DECIMALS = _CRAT_DECIMALS;
+    }
+
+    function start() external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(!started, "Already started");
+        started = true;
         uint256 time = block.timestamp;
         for (uint256 i = 0; i < 8; i++) {
             time += 1209600;
@@ -32,15 +48,16 @@ contract CRATPresale is AccessControl, ReentrancyGuard {
             }
             STAGES[i] = time;
         }
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        _setupRole(SIGNER_ROLE, _msgSender());
-        CRAT = IERC20(_CRAT);
-        CRAT_DECIMALS = _CRAT_DECIMALS;
     }
 
-    function buy(address tokenToPay, uint256 amountToPay, uint256 amountToReceive, uint256 endTime, bytes calldata signature) external payable nonReentrant {
-        require(hasRole(SIGNER_ROLE, ECDSA.recover(keccak256(abi.encodePacked(tokenToPay, amountToPay, amountToReceive, endTime)), signature)));
-        require(endTime >= block.timestamp);
+    function pullToken(address toSend) external onlyRole(DEFAULT_ADMIN_ROLE) onlyWhenStarted nonReentrant {
+        require(block.timestamp > STAGES[7], "Not ended yet");
+        CRAT.transfer(toSend, CRAT.balanceOf(address(this)));
+    }
+
+    function buy(address tokenToPay, uint256 amountToPay, uint256 amountToReceive, uint256 endTime, bytes calldata signature) external payable onlyWhenStarted nonReentrant {
+        require(hasRole(SIGNER_ROLE, ECDSA.recover(keccak256(abi.encodePacked(tokenToPay, amountToPay, amountToReceive, endTime)), signature)), "Invalid signature");
+        require(endTime >= block.timestamp, "Deadline passed");
         require(amountToPay > 0 && amountToReceive > 0, "Cannot pay or receive zero");
         if (tokenToPay == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE) {
             require(amountToPay == msg.value);
@@ -51,7 +68,7 @@ contract CRATPresale is AccessControl, ReentrancyGuard {
             require(IERC20(tokenToPay).transferFrom(_msgSender(), receiver, amountToPay));
         }
         require(CRAT.transfer(_msgSender(), amountToReceive));
-        uint256 stage = _determineStage();
+        uint256 stage = determineStage();
         amounts[stage] += amountToReceive;
         require(amounts[stage] <= LIMITS[stage] * (10 ** (CRAT_DECIMALS + 5)), "Buying surpasses stage limit");
     }
@@ -60,9 +77,9 @@ contract CRATPresale is AccessControl, ReentrancyGuard {
         receiver = _receiver;
     }
 
-    function _determineStage() private view returns (uint256) {
+    function determineStage() public view returns (uint256) {
         for (uint256 i = 0; i < 8; i++) {
-            if (STAGES[i] <= block.timestamp) {
+            if (block.timestamp <= STAGES[i]) {
                 return i;
             }
         }
