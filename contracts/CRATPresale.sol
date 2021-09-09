@@ -20,7 +20,7 @@ contract CRATPresale is AccessControl, ReentrancyGuard {
 
     address public receiver;
 
-    bool private started;
+    bool public started;
 
     modifier onlyWhenStarted() {
         require(started, "Not started yet");
