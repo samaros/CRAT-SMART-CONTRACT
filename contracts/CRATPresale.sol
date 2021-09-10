@@ -19,11 +19,10 @@ contract CRATPresale is AccessControl, ReentrancyGuard {
     uint256 private immutable CRAT_DECIMALS;
 
     address public receiver;
-
-    bool public started;
+    uint256 public startTime;
 
     modifier onlyWhenStarted() {
-        require(started, "Not started yet");
+        require(startTime != 0, "Not started yet");
         _;
     }
  
@@ -35,9 +34,9 @@ contract CRATPresale is AccessControl, ReentrancyGuard {
     }
 
     function start() external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(!started, "Already started");
-        started = true;
+        require(startTime == 0, "Already started");
         uint256 time = block.timestamp;
+        startTime = time;
         for (uint256 i = 0; i < 8; i++) {
             time += 1209600;
             if (i == 1 || i == 4) {
