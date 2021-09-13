@@ -55,7 +55,7 @@ contract CRATPresale is AccessControl, ReentrancyGuard {
     }
 
     function buy(address tokenToPay, uint256 amountToPay, uint256 amountToReceive, uint256 endTime, bytes calldata signature) external payable onlyWhenStarted nonReentrant {
-        require(hasRole(SIGNER_ROLE, ECDSA.recover(keccak256(abi.encodePacked(tokenToPay, amountToPay, amountToReceive, endTime)), signature)), "Invalid signature");
+        require(hasRole(SIGNER_ROLE, ECDSA.recover(ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(tokenToPay, amountToPay, amountToReceive, endTime))), signature)), "Invalid signature");
         require(endTime >= block.timestamp, "Deadline passed");
         require(amountToPay > 0 && amountToReceive > 0, "Cannot pay or receive zero");
         if (tokenToPay == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE) {
