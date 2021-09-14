@@ -33,6 +33,18 @@ contract CRATPresale is AccessControl, ReentrancyGuard {
         CRAT_DECIMALS = _CRAT_DECIMALS;
     }
 
+    function allStages() external view returns (uint256[8] memory) {
+        return STAGES;
+    }
+
+    function allLimits() external view returns (uint256[8] memory) {
+        return LIMITS;
+    }
+
+    function allAmounts() external view returns (uint256[8] memory) {
+        return amounts;
+    }
+
     function start() external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(startTime == 0, "Already started");
         uint256 time = block.timestamp;
