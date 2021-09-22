@@ -4,10 +4,12 @@ require('dotenv').config();
 
 const {
     CRAT_OWNER,
+    CRAT_ADDITIONAL_OWNER,
     CRAT_BENEFICIARY,
     CRAT_BENEFICIARY_PERCENT,
     CRAT_DECIMALS,
     CRAT_OWNER_AMOUNT,
+    CRAT_ADDITIONAL_OWNER_AMOUNT,
     CRAT_PRESALE_AMOUNT,
     PRESALE_ADMIN,
     PRESALE_SIGNER,
@@ -32,15 +34,25 @@ module.exports = async function (deployer, network) {
         return;
     let CRATInst = await CRAT.deployed();
     let CRATPresaleInst = await CRATPresale.deployed();
+
     await CRATInst.excludeFromFee(CRAT_OWNER);
+
     await CRATInst.excludeFromFee(CRATPresaleInst.address);
     await CRATInst.excludeFromReward(CRATPresaleInst.address);
+
     await CRATInst.setFeeBeneficiary(CRAT_BENEFICIARY);
     await CRATInst.setToAddressFee(CRAT_BENEFICIARY_PERCENT);
+
     await CRATInst.excludeFromFee(CRAT_BENEFICIARY);
     await CRATInst.excludeFromReward(CRAT_BENEFICIARY);
+
+    await CRATInst.excludeFromFee(CRAT_ADDITIONAL_OWNER);
+    await CRATInst.excludeFromReward(CRAT_ADDITIONAL_OWNER);
+
     await CRATInst.transfer(CRAT_OWNER, new BN(CRAT_OWNER_AMOUNT).mul(new BN(10).pow(new BN(CRAT_DECIMALS))));
+    await CRATInst.transfer(CRAT_ADDITIONAL_OWNER, new BN(CRAT_ADDITIONAL_OWNER_AMOUNT).mul(new BN(10).pow(new BN(CRAT_DECIMALS))));
     await CRATInst.transfer(CRATPresaleInst.address, new BN(CRAT_PRESALE_AMOUNT).mul(new BN(10).pow(new BN(CRAT_DECIMALS))));
+
     await CRATInst.includeInFee(DEPLOYER_ADDRESS);
     await CRATInst.transferOwnership(CRAT_OWNER);
 
