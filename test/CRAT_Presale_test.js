@@ -121,6 +121,10 @@ contract (
                 { type: "uint256", value: "10000000000" },
                 { type: "uint256", value: deadlinestr }
             ]);
+            message = EthCrypto.hash.keccak256([
+                { type: "string", value: "\x19Ethereum Signed Message:\n32" },
+                { type: "bytes32", value: message }
+            ]);
             signature = EthCrypto.sign(signer.privateKey, message);
 
             expect(await CRATInst.balanceOf(user1)).bignumber.equal(ZERO);
@@ -144,6 +148,10 @@ contract (
                 { type: "uint256", value: "50000000000000000000" },
                 { type: "uint256", value: "10000000000" },
                 { type: "uint256", value: deadlinestr }
+            ]);
+            message = EthCrypto.hash.keccak256([
+                { type: "string", value: "\x19Ethereum Signed Message:\n32" },
+                { type: "bytes32", value: message }
             ]);
             signature = EthCrypto.sign(signer.privateKey, message);
 
@@ -177,6 +185,10 @@ contract (
                 { type: "uint256", value: "10000000000" },
                 { type: "uint256", value: deadlinestr }
             ]);
+            message = EthCrypto.hash.keccak256([
+                { type: "string", value: "\x19Ethereum Signed Message:\n32" },
+                { type: "bytes32", value: message }
+            ]);
             signature = EthCrypto.sign(signer.privateKey, message);
 
             await time.increase(time.duration.minutes(1));
@@ -202,6 +214,10 @@ contract (
                 { type: "uint256", value: "10000000000" },
                 { type: "uint256", value: deadlinestr }
             ]);
+            message = EthCrypto.hash.keccak256([
+                { type: "string", value: "\x19Ethereum Signed Message:\n32" },
+                { type: "bytes32", value: message }
+            ]);
             signature = EthCrypto.sign(signer.privateKey, message);
 
             await expectRevert(
@@ -218,6 +234,10 @@ contract (
                 { type: "uint256", value: "50000000000000000000" },
                 { type: "uint256", value: "0" },
                 { type: "uint256", value: deadlinestr }
+            ]);
+            message = EthCrypto.hash.keccak256([
+                { type: "string", value: "\x19Ethereum Signed Message:\n32" },
+                { type: "bytes32", value: message }
             ]);
             signature = EthCrypto.sign(signer.privateKey, message);
 
@@ -236,6 +256,10 @@ contract (
                 { type: "uint256", value: "10000000000" },
                 { type: "uint256", value: deadlinestr }
             ]);
+            message = EthCrypto.hash.keccak256([
+                { type: "string", value: "\x19Ethereum Signed Message:\n32" },
+                { type: "bytes32", value: message }
+            ]);
             signature = EthCrypto.sign(signer.privateKey, message);
 
             await expectRevert(
@@ -252,6 +276,10 @@ contract (
                 { type: "uint256", value: "50000000000000000000" },
                 { type: "uint256", value: "100000100000000" },
                 { type: "uint256", value: deadlinestr }
+            ]);
+            message = EthCrypto.hash.keccak256([
+                { type: "string", value: "\x19Ethereum Signed Message:\n32" },
+                { type: "bytes32", value: message }
             ]);
             signature = EthCrypto.sign(signer.privateKey, message);
 
@@ -272,6 +300,10 @@ contract (
                 { type: "uint256", value: "50000000000000000000" },
                 { type: "uint256", value: "10000000000" },
                 { type: "uint256", value: deadlinestr }
+            ]);
+            message = EthCrypto.hash.keccak256([
+                { type: "string", value: "\x19Ethereum Signed Message:\n32" },
+                { type: "bytes32", value: message }
             ]);
             signature = EthCrypto.sign(signer.privateKey, message);
 
@@ -295,6 +327,10 @@ contract (
                 { type: "uint256", value: "50000000000000000000" },
                 { type: "uint256", value: "10000000000" },
                 { type: "uint256", value: deadlinestr }
+            ]);
+            message = EthCrypto.hash.keccak256([
+                { type: "string", value: "\x19Ethereum Signed Message:\n32" },
+                { type: "bytes32", value: message }
             ]);
             signature = EthCrypto.sign(signer.privateKey, message);
 
